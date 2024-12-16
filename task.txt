@@ -1,6 +1,6 @@
-REST API-JSON
+REST API-JSON--DONE
 
-GEt/user-List all user JSoN
-GET/USERS/1-Get the user with ID 1
-GET/USERS/1-Get the user with ID 2
+GEt/user-List all user JSoN --DONE
+GET/USERS/1-Get the user with ID 1  --done
+GET/USERS/2-Get the user with ID 2 --done
 Post/USERS-Create new user

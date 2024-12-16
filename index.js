@@ -1,14 +1,11 @@
 const express=require('express');
-//const user=require("./MOCK_DATA.json")
+const users=require("./MOCK_DATA.json")
 const app=express();
-const mongoose=require("mongoose");
 const fs=require('fs');
 const { type } = require('os');
 const PORT=8000;
-//Connection
-mongoose.connect('mongodb://127.0.0.1:27017/youtube-app-1').then(()=>console.log("MongoDB Connected"))
-.catch((err)=>console.log("Mongo Error",err));
-app.use(express.urlencoded({extended:false}));//middleware pulgin
+const mongoose=require("mongoose");
+
 //schema
 const userSchema=new mongoose.Schema({
     firstName:{
@@ -31,7 +28,32 @@ const userSchema=new mongoose.Schema({
         type:String,
     }
 })
+
 const User=mongoose.model("user",userSchema);
+
+
+
+// app.get("/api/users",(req,res)=>{
+//     return res.json(users)
+// })                               //Rest API
+// app.get("/users",(req,res)=>{                                  // All this get data from mockdata
+//   const html=`
+//   <ul> 
+//   ${users.map((user)=>`<li>${user.first_name}</li>`)} 
+//   </ul>`;
+//   res.send(html);
+// })
+// app.get("/api/users/:id",(req,res)=>{
+//     const id=Number(req.params.id);
+//     const user=users.find((user)=>user.id===id);
+//     return res.json(user)
+// }) 
+//Connection
+mongoose.connect('mongodb://127.0.0.1:27017/youtube-app-1').then(()=>console.log("MongoDB Connected"))
+.catch((err)=>console.log("Mongo Error",err));
+app.use(express.urlencoded({extended:false}));//middleware pulgin
+
+
 app.get("/user",async(req,res)=>{
     const allDbUsers=await User.find({});
     const html=`
@@ -41,19 +63,19 @@ app.get("/user",async(req,res)=>{
      res.send(html);
 })
 //REST API
-app.get("/api/user",(req,res)=>{
-    res.setHeader('myName','Piysuh Garg')
-    return res.json(user);
-})
+   app.get("/api/users",(req,res)=>{
+   return res.json(users)
+     })      
 app
-.route("/api/user/:id")
+.route("/api/users/:id")
 .get((req,res)=>{
     const id=Number(req.params.id);
     const users=user.find((user)=>user.id===id);
     return res.json(users);
 })
-.patch((req,res)=>{
-    res.json({status:"Pending"})
+.patch(async(req,res)=>{
+    await User.findByIdAndUpdate(req.params.id,{lastname:"Changed"});
+     return res.json({status:"success"})
 })
 .delete((req,res)=>{
     return res.json({status:"Pending"});
