@@ -1,6 +1,7 @@
 const express=require('express');
 const users=require("./MOCK_DATA.json")
 const app=express();
+const validator = require('validator');       // to check email if valid or not
 const fs=require('fs');
 const { type } = require('os');
 const PORT=8000;
@@ -93,6 +94,10 @@ app.post("/api/user",async(req,res)=>{
         ){
             return res.status(400).json({msg:"all field are reqire.."});
         }
+        if (!validator.isEmail(body.email)) {
+            return res.status(400).json({ error: 'Invalid email address' });    // this check if email id valid or not
+        }
+        
      const result=  await User.create({
             firstName:body.first_name,
             last_name:body.last_name,
