@@ -27,6 +27,7 @@ const userSchema=new mongoose.Schema({
     },
     gender:{
         type:String,
+        require:true,
     }
 })
 
@@ -94,9 +95,15 @@ app.post("/api/user",async(req,res)=>{
         ){
             return res.status(400).json({msg:"all field are reqire.."});
         }
+        // this check if email id valid or not
         if (!validator.isEmail(body.email)) {
-            return res.status(400).json({ error: 'Invalid email address' });    // this check if email id valid or not
+            return res.status(400).json({ error: 'Invalid email address' });    
         }
+        // Validate gender 
+        const allowedGenders = ['male', 'female', 'other'];
+        if (!allowedGenders.includes(body.gender)) {
+        return res.status(400).json({ error: 'Gender must be male, female, or other' });
+    }
         
      const result=  await User.create({
             firstName:body.first_name,
