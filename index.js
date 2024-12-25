@@ -4,7 +4,7 @@ const app=express();
 const validator = require('validator');       // to check email if valid or not
 const fs=require('fs');
 const { type } = require('os');
-const PORT=8000;
+const PORT=8005;
 const mongoose=require("mongoose");
 
 //schema
@@ -54,6 +54,7 @@ const User=mongoose.model("user",userSchema);
 mongoose.connect('mongodb://127.0.0.1:27017/youtube-app-1').then(()=>console.log("MongoDB Connected"))
 .catch((err)=>console.log("Mongo Error",err));
 app.use(express.urlencoded({extended:false}));//middleware pulgin
+app.use(express.json());
 
 
 app.get("/user",async(req,res)=>{
@@ -72,8 +73,8 @@ app
 .route("/api/users/:id")
 .get((req,res)=>{
     const id=Number(req.params.id);
-    const users=user.find((user)=>user.id===id);
-    return res.json(users);
+    const user=users.find((user)=>user.id===id);
+    return res.json(user);
 })
 .patch(async(req,res)=>{
     await User.findByIdAndUpdate(req.params.id,{lastname:"Changed"});
@@ -94,7 +95,7 @@ app.post("/api/user",async(req,res)=>{
 
         ){
             return res.status(400).json({msg:"all field are reqire.."});
-        }
+        };
         // this check if email id valid or not
         if (!validator.isEmail(body.email)) {
             return res.status(400).json({ error: 'Invalid email address' });    
@@ -122,6 +123,6 @@ app.post("/api/user",async(req,res)=>{
 });
 
 
-app.listen(PORT,()=>console.log(`Server Started at PORT ${8000}`));
+app.listen(PORT,()=>console.log(`Server Started at PORT ${8005}`));
 
 
